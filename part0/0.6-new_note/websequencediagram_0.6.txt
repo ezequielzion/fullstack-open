@@ -1,0 +1,17 @@
+title Exercise 0.6: New note in SPA
+
+note over browser:
+browser executes the event handler
+that renders notes to display 
+using the DOM-API. Then, it sends
+the new note to the server
+end note
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+server receives request and
+after processing it, sends a
+response
+end note
+
+server-->browser: Response with Code 201, {content: "Wagmi", date: "2022-05-28T07:50:24.770Z"}

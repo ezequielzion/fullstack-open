@@ -1,0 +1,38 @@
+title Exercise 0.4: New Note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note over server:
+server receives request and
+after processing it, sends a 
+response. We don't know 
+specifically what the server
+does between the request and
+the response, but we are sure 
+it'll try to store the note
+end note
+server-->browser: 302 Response
+note over browser:
+browser redirects to the location
+defined in the Response Headers:
+/exampleapp/notes
+end note
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/exampleapp/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{"content":"wat","date":"2022-05-27T16:54:51.241Z"}, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
