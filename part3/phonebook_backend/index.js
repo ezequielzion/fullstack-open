@@ -1,7 +1,10 @@
+const { response } = require('express')
 const express = require('express')
 
 const app = express()
 app.use(express.json())
+
+const generateId = () => Math.trunc(Math.random() * 1000000000000)
 
 let persons = [
     { 
@@ -33,6 +36,30 @@ app.get('/', (request, response) => {
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
+
+app.post('api/persons', (request, response) => {
+  console.log("adasdadasdasd");
+  const body = request.body
+
+  /* if (!body) {
+    return response.status(400).json({ 
+      error: 'content missing' 
+    })
+  } */
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    date: new Date(),
+    id: generateId(),
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
+
+})
+
 
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
