@@ -5,6 +5,8 @@ const app = express()
 app.use(express.json())
 
 const generateId = () => Math.trunc(Math.random() * 1000000000000)
+const existsInDB = name => persons.some(p => p.name === name)
+
 
 let persons = [
     { 
@@ -30,36 +32,13 @@ let persons = [
 ]
 
 app.get('/', (request, response) => {
+    console.log("HOLA MUNDO");
     response.send('<h1>Hello World!</h1>')
 })
-  
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
-
-app.post('api/persons', (request, response) => {
-  console.log("adasdadasdasd");
-  const body = request.body
-
-  /* if (!body) {
-    return response.status(400).json({ 
-      error: 'content missing' 
-    })
-  } */
-
-  const person = {
-    name: body.name,
-    number: body.number,
-    date: new Date(),
-    id: generateId(),
-  }
-
-  persons = persons.concat(person)
-
-  response.json(person)
-
-})
-
 
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
@@ -69,6 +48,31 @@ app.get('/api/persons/:id', (request, response) => {
   } else {
     response.status(404).end()
   }
+})
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({ 
+      error: 'content missing' 
+    })
+  }
+  
+  if(existsInDB(body.name)){
+    return response.status(400).json({ 
+      error: 'name must be unique'
+    })
+  }
+
+  const person = {
+    id: generateId(),
+    name: body.name,
+    number: body.number,
+  }
+
+  persons = persons.concat(person)
+  response.json(person)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
