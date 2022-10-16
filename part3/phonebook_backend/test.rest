@@ -1,7 +1,8 @@
-POST  http://localhost:3001/api/persons/
-
+POST  http://localhost:3001/api/persons
 Content-Type: application/json
+//tiene que haber un espacio acá, no entre la URL y el Content-Type
+
 {
-    "name": "pepe",
-    "number": "adssa"
+    "name": "aadasd",
+    "number": "adscfsa"
 }

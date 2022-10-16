@@ -1,12 +1,26 @@
+require('dotenv').config();
 const { response } = require('express')
 const express = require('express')
+const morgan = require('morgan')
 
 const app = express()
+
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+morgan.token('content', (req, res) => JSON.stringify(req.body))
+
 app.use(express.json())
+app.use(requestLogger)
+app.use(express.static('build'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 
 const generateId = () => Math.trunc(Math.random() * 1000000000000)
 const existsInDB = name => persons.some(p => p.name === name)
-
 
 let persons = [
     { 
@@ -32,7 +46,6 @@ let persons = [
 ]
 
 app.get('/', (request, response) => {
-    console.log("HOLA MUNDO");
     response.send('<h1>Hello World!</h1>')
 })
 
@@ -86,6 +99,12 @@ app.get('/info', (request, response) => {
   response.send(text)
 })
 
-const PORT = 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint)
+
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
