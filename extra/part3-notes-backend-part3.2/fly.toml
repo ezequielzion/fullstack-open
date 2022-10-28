@@ -1,11 +1,12 @@
-# fly.toml file generated for broken-dust-440 on 2022-10-27T03:24:10-03:00
+# fly.toml file generated for broken-glade-3751 on 2022-10-28T04:57:16-03:00
 
-app = "broken-dust-440"
+app = "broken-glade-3751"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
 [env]
+  PORT = "8080"
 
 [experimental]
   allowed_public_ports = []
