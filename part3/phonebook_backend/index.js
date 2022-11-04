@@ -2,11 +2,7 @@ const { response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-
-
 const app = express()
-app.use(cors())
-
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
@@ -16,6 +12,8 @@ const requestLogger = (request, response, next) => {
 }
 morgan.token('content', (req, res) => JSON.stringify(req.body))
 
+app.use(cors())
+app.use(express.static('build'))
 app.use(express.json())
 app.use(requestLogger)
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
