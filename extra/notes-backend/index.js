@@ -1,7 +1,31 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const mongoose = require('mongoose')
+require('dotenv').config();
 
+const PASSWORD = process.env.DB_PASS
+
+const url = 
+  `mongodb+srv://ezion-fullstackopen:${PASSWORD}@cluster0.pzhenly.mongodb.net/noteApp?retryWrites=true&w=majority`
+
+mongoose.connect(url)
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  date: Date,
+  important: Boolean,
+})
+
+noteSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+const Note = mongoose.model('Note', noteSchema)
 let notes = [
   {
     id: 1,
@@ -71,8 +95,10 @@ app.post('/api/notes', (request, response) => {
   response.json(note)
 })
 
-app.get('/api/notes', (req, res) => {
-  res.json(notes)
+app.get('/api/notes', (request, response) => {
+  Note.find({}).then(notes => {
+    response.json(notes)
+  })
 })
 
 app.delete('/api/notes/:id', (request, response) => {
