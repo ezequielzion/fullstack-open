@@ -3,6 +3,6 @@ Content-Type: application/json
 //There's gotta be a line break here and not between the URL and the Content-Type
 
 {
-    "content": "Testing from VS Code",
+    "content": "Testing from VS Code 2",
     "important": true
 }
