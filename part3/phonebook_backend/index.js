@@ -3,6 +3,8 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
+const Person = require('./models/person')
+
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
@@ -12,14 +14,11 @@ const requestLogger = (request, response, next) => {
 }
 morgan.token('content', (req, res) => JSON.stringify(req.body))
 
+app.use(express.json())
 app.use(cors())
 app.use(express.static('build'))
-app.use(express.json())
 app.use(requestLogger)
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
-
-const generateId = () => Math.trunc(Math.random() * 1000000000000)
-const existsInDB = name => persons.some(p => p.name === name)
 
 let persons = [
     { 
@@ -54,17 +53,21 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+  Person.find({}).then(people => {
+    response.json(people)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.filter(p => p.id === id)
+  Person.findById(request.params.id).then(person => {
+    response.json(person)
+  })
+  /* const person = persons.filter(p => p.id === id)
   if (person.length > 0) {
     response.json(person)
   } else {
     response.status(404).end()
-  }
+  } */
 })
 
 app.post('/api/persons', (request, response) => {
@@ -76,20 +79,14 @@ app.post('/api/persons', (request, response) => {
     })
   }
   
-  if(existsInDB(body.name)){
-    return response.status(400).json({ 
-      error: 'name must be unique'
-    })
-  }
-
-  const person = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  }
+  })
 
-  persons = persons.concat(person)
-  response.json(person)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
