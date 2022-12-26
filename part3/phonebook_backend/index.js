@@ -48,10 +48,6 @@ let persons = [
     }
 ]
 
-app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
-})
-
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(people => {
     response.json(people)
@@ -62,12 +58,6 @@ app.get('/api/persons/:id', (request, response) => {
   Person.findById(request.params.id).then(person => {
     response.json(person)
   })
-  /* const person = persons.filter(p => p.id === id)
-  if (person.length > 0) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  } */
 })
 
 app.post('/api/persons', (request, response) => {
