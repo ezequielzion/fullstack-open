@@ -1,0 +1,8 @@
+PUT     http://localhost:3001/api/notes/63a9d05b9d94c51d58f000cc
+Content-Type: application/json
+//There's gotta be a line break here and not between the URL and the Content-Type
+
+{
+    "content": "Testing UPDATE FROM from VS Code ",
+    "important": true
+}
