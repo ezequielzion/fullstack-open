@@ -1,8 +1,8 @@
-POST    http://localhost:3001/api/persons
+PUT    http://localhost:3001/api/persons/63ae13182f217206bbeebb51
 Content-Type: application/json
 //There's gotta be a line break here and not between the URL and the Content-Type
 
 {
-    "name": "SAM SMITH",
+    "name": "EDITED SAM SMITH",
     "number": "123"
 }
