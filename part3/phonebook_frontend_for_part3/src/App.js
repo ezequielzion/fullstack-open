@@ -59,10 +59,8 @@ const App = () => {
             newPersons[index] = res
             setPersons(newPersons)
           })
-          .catch(() => {
-            setNotification(
-              `Information of ${newName} has been already removed from the server`
-            )
+          .catch(error => {
+            setNotification(error.response.data.error)
             setSuccessfulOperation(false)
             setTimeout(() => {
               setNotification(null)
@@ -82,10 +80,8 @@ const App = () => {
             setNotification(null)
           }, 5000)
         })
-        .catch(() => {
-          setNotification(
-            `${newName} could not be added server`
-          )
+        .catch(error => {
+          setNotification(error.response.data.error)
           setTimeout(() => {
             setNotification(null)
           }, 5000)
