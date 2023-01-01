@@ -54,6 +54,10 @@ const App = () => {
         personsService
           .update(existingPerson.id, {...existingPerson, number: newNumber})
           .then(res => {
+            setNotification(
+              `Updated ${res.name}'s number`
+            )
+            setSuccessfulOperation(true)
             const index = persons.findIndex(p => p.id === existingPerson.id)
             const newPersons = [...persons]
             newPersons[index] = res
@@ -81,6 +85,7 @@ const App = () => {
           }, 5000)
         })
         .catch(error => {
+          setSuccessfulOperation(false)
           setNotification(error.response.data.error)
           setTimeout(() => {
             setNotification(null)
