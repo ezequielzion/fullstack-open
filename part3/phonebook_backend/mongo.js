@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const mongoose = require('mongoose')
 
 if (process.argv.length < 3) {
@@ -20,24 +21,24 @@ const Person = mongoose.model('Person', personSchema)
 
 mongoose
   .connect(url)
-  .then((result) => {
+  .then(() => {
     console.log('connected')
-    
+
     if (name && number) {
       const person = new Person({
         name: name,
         number: number
       })
       return person.save()
-      .then(() => {
-        console.log(`added ${name} number ${number} to phonebook`);
-        return mongoose.connection.close()
-      })
+        .then(() => {
+          console.log(`added ${name} number ${number} to phonebook`)
+          return mongoose.connection.close()
+        })
     } else {
       Person
         .find({})
         .then(result => {
-          console.log("Phonebook:");
+          console.log('Phonebook:')
           result.forEach(person => console.log(person.name, person.number))
           mongoose.connection.close()
         })
