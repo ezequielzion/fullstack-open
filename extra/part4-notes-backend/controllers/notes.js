@@ -28,13 +28,9 @@ notesRouter.post('/', async (request, response) => {
   response.status(201).json(savedNote)
 })
 
-notesRouter.delete('/:id', async (request, response, next) => {
-  try {
+notesRouter.delete('/:id', async (request, response) => {
     await Note.findByIdAndRemove(request.params.id)
     response.status(204).end()
-  } catch(exception) {
-    next(exception)
-  }
 })
 
 notesRouter.put('/:id', async (request, response) => {
