@@ -7,11 +7,9 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 
 beforeEach(async () => {
-    await Blog.deleteMany({})
-    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
-    const promiseArray = blogObjects.map(blog => blog.save())
-    await Promise.all(promiseArray)
-}, 100000)
+  await Blog.deleteMany({})
+  await Blog.insertMany(helper.initialBlogs)
+})
 
 test('all blogs are returned', async () => {
   const response = await api.get('/api/blogs')
@@ -113,6 +111,33 @@ test('succeeds at deleting with status code 204 if id is valid', async () => {
   const contents = blogsAtEnd.map(b => b.title)
 
   expect(contents).not.toContain(blogToDelete.title)
+})
+
+test('a blog can be updated ', async () => {
+  const TITLE = 'This is the title for the edited blog'
+  const LIKES = 55
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToEdit = blogsAtStart[0]
+
+  const editedBlog = {
+    ...blogToEdit,
+    title: TITLE,
+    likes: LIKES
+  }
+
+  const response = await api
+    .put(`/api/blogs/${blogToEdit.id}`)
+    .send(editedBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+
+  expect(response.body.id).toBe(blogToEdit.id)
+  expect(response.body.url).toBe(blogToEdit.url)
+  expect(response.body.author).toBe(blogToEdit.author)
+
+  expect(response.body.title).toBe(TITLE)
+  expect(response.body.likes).toBe(LIKES)
 })
 
 afterAll(() => {
