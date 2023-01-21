@@ -1,0 +1,9 @@
+POST    http://localhost:3001/api/users
+Content-Type: application/json
+//There's gotta be a line break here and not between the URL and the Content-Type
+
+{
+    "username": "yulo",
+    "name": "Yulo",
+    "password": "yulo123"
+}
