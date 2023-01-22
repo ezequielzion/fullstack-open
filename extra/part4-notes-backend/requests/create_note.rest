@@ -3,6 +3,7 @@ Content-Type: application/json
 //There's gotta be a line break here and not between the URL and the Content-Type
 
 {
-    "content": "TESTING NEW ENDPOINTS",
-    "important": true
+    "content": "Last note!",
+    "important": true,
+    "userId": "63cb99df8fa7540c6dacb2fe"
 }
