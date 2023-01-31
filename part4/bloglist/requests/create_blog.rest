@@ -3,8 +3,8 @@ Content-Type: application/json
 //There's gotta be a line break here and not between the URL and the Content-Type
 
 {
-    "title": "Now with a user creator 444",
-    "author": "Pepe Argento444",
-    "url": "pepeargento.net444",
-    "likes": 444
+    "title": "Now with a user creator 666",
+    "author": "Pepe Argento666",
+    "url": "pepeargento.net666",
+    "likes": 666
 }

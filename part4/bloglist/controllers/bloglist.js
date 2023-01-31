@@ -1,10 +1,10 @@
 const bloglistRouter = require('express').Router()
-const Blog = require('../models/blog')
+const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const Blog = require('../models/blog')
 
 bloglistRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
-
   response.json(blogs)
 })
 
@@ -12,11 +12,14 @@ bloglistRouter.post('/', async (request, response) => {
   const {title, author, url, likes} = request.body
 
   if(!title || !url) response.status(400).end()
-  if(!likes) likes = 0
 
-  const users = await User.find({})
-  const index = Math.floor(Math.random() * users.length)
-  const user = users[index]
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if(!decodedToken.id){
+    return response.status(401).json({ error: 'token invalid'})
+  }
+  const user = await User.findById(decodedToken.id)
+
+  if(!likes) likes = 0
 
   const blog = new Blog({
     title: title,
@@ -27,6 +30,9 @@ bloglistRouter.post('/', async (request, response) => {
   })
 
   const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+
   response.status(201).json(savedBlog)
 })
 
