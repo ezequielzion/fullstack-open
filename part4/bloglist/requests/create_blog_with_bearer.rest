@@ -1,11 +1,10 @@
 POST    http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUz1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGUiLCJpZCI6IjYzZDc2NWMxY2VlMzcyYzFiYWQ1ZTFhYyIsImlhdCI6MTY3NTEyNDM4NH0.EIWNk417qXzzhp3JFjxxhDXNx1sEdnStj6b-tbDtBeM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGUiLCJpZCI6IjYzZDc2NWMxY2VlMzcyYzFiYWQ1ZTFhYyIsImlhdCI6MTY3NTU4NDk5N30.WnXZISC1ODXxHp9JfFWj-lWQx1uycaCtqjIrTkCBiN8
 //There's gotta be a line break here and not between the URL and the Content-Type
 
 {
-    "title": "Testing middleware thingy",
-    "author": "Usin pepe",
-    "url": "pepe.net",
-    "likes": 123
+    "title": "FINAL",
+    "author": "FINAL pepe",
+    "url": "FINALpepe.net"
 }

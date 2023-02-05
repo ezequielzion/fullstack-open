@@ -9,15 +9,16 @@ bloglistRouter.get('/', async (request, response) => {
 })
 
 bloglistRouter.post('/', async (request, response) => {
-  const {title, author, url, likes} = request.body
+  const { title, author, url } = request.body
+  let { likes } = request.body
 
   if(!title || !url) response.status(400).end()
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if(!decodedToken.id){
+  const user = request.user
+  
+  if(!user){
     return response.status(401).json({ error: 'token invalid'})
   }
-  const user = await User.findById(decodedToken.id)
 
   if(!likes) likes = 0
 
@@ -37,14 +38,18 @@ bloglistRouter.post('/', async (request, response) => {
 })
 
 bloglistRouter.delete('/:id', async (request, response) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  const user = request.user
+  if(!user){
+    return response.status(401).json({ error: 'token invalid'})
+  }
+
   const blogToDelete = await Blog.findById(request.params.id)
 
-  if(blogToDelete.user.toString() === decodedToken.id.toString()){
+  if(blogToDelete.user.toString() === user._id.toString()){
     await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end()
   } else {
-    response.status(400).end()
+    response.status(400).json({error: 'blog not created by this user'}).end()
   }
 })
 
