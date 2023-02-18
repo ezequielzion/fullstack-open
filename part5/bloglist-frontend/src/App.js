@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [notification, setNotification] = useState(null)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))  
@@ -84,23 +84,13 @@ const App = () => {
     setUser(null)
   }
 
-  const addBlog = event => {
-    event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
-
+  const addBlog = blogObject => {
+    blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
       .then(returnedBlog => {
+        returnedBlog = {...returnedBlog, user: user}
         setBlogs(blogs.concat(returnedBlog))
-
-        setTitle('')
-        setAuthor('')
-        setUrl('')
-        
         setNotification({
           message: `${returnedBlog.title} by ${returnedBlog.author} was added to the server`,
           isError: false
@@ -121,31 +111,9 @@ const App = () => {
   }
 
   const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <h2>Create new blog</h2>
-      <p>
-        Title:
-        <input 
-          value={title} 
-          onChange={({target}) => setTitle(target.value)}
-        />
-      </p>
-      <p>
-        Author:
-        <input 
-          value={author} 
-          onChange={({target}) => setAuthor(target.value)}
-        />
-      </p>
-      <p>
-        Url:
-        <input 
-          value={url} 
-          onChange={({target}) => setUrl(target.value)}
-        />
-      </p>
-      <button type="submit">save</button>
-    </form>
+    <Togglable buttonLabel='new blog' ref={blogFormRef}>
+      <BlogForm createBlog={addBlog} />
+    </Togglable>
   )
 
   return (

@@ -1,7 +1,6 @@
 import '../index.css'
 
 const Notification = ({ notification }) => {
-    console.log(notification);
     if(notification === null) return null
     else return (
         <h2 className={notification.isError ? "error-notification" : "success-notification"}>
