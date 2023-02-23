@@ -15,7 +15,7 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs))  
+    blogService.getAll().then(blogs => setBlogs(sortBlogs(blogs)))  
   }, [])
 
   useEffect(() => {
@@ -27,6 +27,8 @@ const App = () => {
     }
   }, []);
 
+  const sortBlogs = blogs => blogs.sort((a, b) => b.likes - a.likes)
+  
   const handleLogin = async (event) => {
     event.preventDefault()
     
@@ -124,7 +126,15 @@ const App = () => {
 
     let _blogs = structuredClone(blogs)
     _blogs[indexOfUpdatedBlog] = updatedBlog
-    setBlogs(_blogs)
+    setBlogs(sortBlogs(_blogs))
+  }
+
+  const deleteBlog = async blog => {
+    if(window.confirm(`Are you sure you want to delete ${blog.title}?`)){
+      await blogService.deleteBlog(blog.id)
+      const blogs = await blogService.getAll()
+      setBlogs(sortBlogs(blogs))  
+    }
   }
 
   const blogForm = () => (
@@ -144,7 +154,13 @@ const App = () => {
           <button onClick={handleLogout}>logout</button>
           {blogForm()}
           {blogs.map((blog, index) =>
-            <Blog key={blog.id} blog={blog} addLike={blog => addLike(index, blog)}/>
+            <Blog 
+              key={blog.id}
+              blog={blog}
+              addLike={blog => addLike(index, blog)}
+              deleteBlog={() => deleteBlog(blog)}
+              user={user}
+            />
           )}
         </div>
       }
