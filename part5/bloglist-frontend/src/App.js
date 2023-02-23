@@ -110,7 +110,7 @@ const App = () => {
       })
   }
 
-  const addLike = async (blogToUpdate) => {
+  const addLike = async (indexOfUpdatedBlog, blogToUpdate) => {
     const data = {
       title: blogToUpdate.title,
       url: blogToUpdate.url,
@@ -122,7 +122,6 @@ const App = () => {
     let updatedBlog = await blogService.update(data, blogToUpdate.id)
     updatedBlog = {...updatedBlog, user: user}
 
-    const indexOfUpdatedBlog = blogs.findIndex(blog => blog.id === updatedBlog.id)
     let _blogs = structuredClone(blogs)
     _blogs[indexOfUpdatedBlog] = updatedBlog
     setBlogs(_blogs)
@@ -144,8 +143,8 @@ const App = () => {
           <p>{user.name} logged in</p>
           <button onClick={handleLogout}>logout</button>
           {blogForm()}
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} addLike={addLike}/>
+          {blogs.map((blog, index) =>
+            <Blog key={blog.id} blog={blog} addLike={blog => addLike(index, blog)}/>
           )}
         </div>
       }
