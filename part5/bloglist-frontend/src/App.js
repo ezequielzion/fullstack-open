@@ -8,14 +8,14 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(sortBlogs(blogs)))  
+    blogService.getAll().then(blogs => setBlogs(sortBlogs(blogs)))
   }, [])
 
   useEffect(() => {
@@ -25,42 +25,42 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
-  }, []);
+  }, [])
 
   const sortBlogs = blogs => blogs.sort((a, b) => b.likes - a.likes)
-  
+
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
       })
       window.localStorage.setItem(
         'loggedBlogAppUser', JSON.stringify(user)
-      ) 
+      )
       setUser(user)
-      
+
       setUsername('')
       setPassword('')
-      
-      setNotification({message: 'Login successful', isError: false})
+
+      setNotification({ message: 'Login successful', isError: false })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     } catch (exception) {
-      setNotification({message: 'Wrong credentials', isError: true})
+      setNotification({ message: 'Wrong credentials', isError: true })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     }
   }
-  
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -69,7 +69,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -77,7 +77,7 @@ const App = () => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
+    </form>
   )
 
   const handleLogout = () => {
@@ -91,7 +91,7 @@ const App = () => {
     blogService
       .create(blogObject)
       .then(returnedBlog => {
-        returnedBlog = {...returnedBlog, user: user}
+        returnedBlog = { ...returnedBlog, user: user }
         setBlogs(blogs.concat(returnedBlog))
         setNotification({
           message: `${returnedBlog.title} by ${returnedBlog.author} was added to the server`,
@@ -103,7 +103,7 @@ const App = () => {
       })
       .catch(() => {
         setNotification({
-          message: `There was an error adding the note to the server`,
+          message: 'There was an error adding the note to the server',
           isError: true
         })
         setTimeout(() => {
@@ -122,7 +122,7 @@ const App = () => {
     }
 
     let updatedBlog = await blogService.update(data, blogToUpdate.id)
-    updatedBlog = {...updatedBlog, user: user}
+    updatedBlog = { ...updatedBlog, user: user }
 
     let _blogs = structuredClone(blogs)
     _blogs[indexOfUpdatedBlog] = updatedBlog
@@ -133,7 +133,7 @@ const App = () => {
     if(window.confirm(`Are you sure you want to delete ${blog.title}?`)){
       await blogService.deleteBlog(blog.id)
       const blogs = await blogService.getAll()
-      setBlogs(sortBlogs(blogs))  
+      setBlogs(sortBlogs(blogs))
     }
   }
 
@@ -147,14 +147,14 @@ const App = () => {
     <div>
       <h1>Blogs</h1>
       <Notification notification={notification} />
-      {!user && loginForm()} 
-      {user && 
+      {!user && loginForm()}
+      {user &&
         <div>
           <p>{user.name} logged in</p>
           <button onClick={handleLogout}>logout</button>
           {blogForm()}
           {blogs.map((blog, index) =>
-            <Blog 
+            <Blog
               key={blog.id}
               blog={blog}
               addLike={blog => addLike(index, blog)}
