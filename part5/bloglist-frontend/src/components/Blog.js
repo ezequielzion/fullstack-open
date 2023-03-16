@@ -20,13 +20,14 @@ const Blog = ({ blog, addLike, deleteBlog, user }) => {
           (
             <div>
               <div>
-                {blog.title} {blog.author}
+                <p>{blog.title}</p>
+                <p>{blog.author}</p>
                 <button onClick={() => setShowDetails(!showDetails)}>Hide</button>
               </div>
-              <a href={`https://${blog.url}`} target="_blank" rel="noreferrer">
+              <a href={`https://${blog.url}`} target="_blank" rel="noreferrer" id='url'>
                 {blog.url}
               </a>
-              <div>
+              <div id='likes'>
                 {blog.likes}
                 <button onClick={() => addLike(blog)}>Like</button>
               </div>
@@ -45,7 +46,8 @@ const Blog = ({ blog, addLike, deleteBlog, user }) => {
           :
           (
             <div>
-              {blog.title} {blog.author}
+              <p>{blog.title}</p>
+              <p>{blog.author}</p>
               <button onClick={() => setShowDetails(!showDetails)}>Show</button>
             </div>
           )
