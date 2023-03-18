@@ -72,5 +72,38 @@ test('clicking the button calls event handler once', async () => {
 
   const likes = screen.getByText(100)
   expect(likes).toBeDefined()
+})
 
+test('clicking the like button twice calls the event handler twice', async () => {
+  const blog = {
+    title: 'This is the title',
+    author: 'John Johnson',
+    likes: 100,
+    url: 'www.medium.com',
+    user: { name: 'pepo', username: 'pepe' }
+  }
+
+  const mockHandler = jest.fn()
+
+  render(
+    <Blog
+      blog={blog}
+      addLike={mockHandler}
+      deleteBlog={mockHandler}
+      user={{ name: 'pepo', username: 'pepe' }}
+    />
+  )
+
+  const user = userEvent.setup()
+
+  const showButton = screen.getByText('Show')
+  expect(showButton).toBeDefined()
+  await user.click(showButton)
+
+  const likeButton = screen.getByText('Like')
+  expect(likeButton).toBeDefined()
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
 })

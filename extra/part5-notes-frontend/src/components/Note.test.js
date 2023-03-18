@@ -35,5 +35,3 @@ test('clicking the button calls event handler once', async () => {
 
   expect(mockHandler.mock.calls).toHaveLength(1)
 })
-
-test('recomendame algo github')
