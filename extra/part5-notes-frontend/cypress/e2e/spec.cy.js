@@ -12,7 +12,6 @@ describe('Note ', function() {
 
   it('front page can be opened', function() {
     cy.contains('Notes')
-    cy.contains('Note app, Department of Computer Science, University of Helsinki 2023')
   })
 
   it('login form can be opened', function() {
@@ -21,10 +20,10 @@ describe('Note ', function() {
     cy.get('#password').type('salainen')
     cy.get('#login-button').click()
 
-    cy.contains('Matti logged in')
+    cy.contains('Matti Luukkainen logged in')
   })
 
-  it.only('login fails with wrong password', function() {
+  it('login fails with wrong password', function() {
     cy.contains('login').click()
     cy.get('#username').type('mluukkai')
     cy.get('#password').type('wrong')
@@ -55,12 +54,23 @@ describe('Note ', function() {
       })
 
       it('it can be made important', function () {
-        cy.contains('another note cypress')
-          .contains('make not important')
-          .click()
+        cy.contains('another note cypress').parent().find('button').click()
+        cy.contains('another note cypress').parent().find('button')
+          .should('contain', 'make not important')
+      })
+    })
 
-        cy.contains('another note cypress')
-          .contains('make important')
+    describe('and several notes exist', function () {
+      beforeEach(function () {
+        cy.createNote({ content: 'first note', important: false })
+        cy.createNote({ content: 'second note', important: false })
+        cy.createNote({ content: 'third note', important: false })
+      })
+
+      it('one of those can be made important', function () {
+        cy.contains('second note').parent().find('button').as('theButton')
+        cy.get('@theButton').click()
+        cy.get('@theButton').should('contain', 'make not important')
       })
     })
   })
