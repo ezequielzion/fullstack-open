@@ -41,5 +41,40 @@ describe('Blog app', function() {
           .should('have.css', 'color', 'rgb(255, 0, 0)')
       })
     })
+
+    describe('When logged in', function() {
+      beforeEach(function() {
+        cy.get('#username').type('mluukkai')
+        cy.get('#password').type('salainen')
+        cy.get('#login-button').click()
+      })
+
+      it('A blog can be created', function() {
+        cy.contains('new blog').click()
+        cy.get('#title').type('a blog created by cypress')
+        cy.get('#author').type('Cecy "The Mad press" Pressman')
+        cy.get('#url').type('https://www.google.com')
+        cy.contains('save').click()
+        cy.contains('a blog created by cypress')
+        cy.contains('Cecy "The Mad press" Pressman')
+      })
+
+      it.only('User can like blogs', function(){
+        cy.contains('new blog').click()
+        cy.get('#title').type('a blog created by cypress')
+        cy.get('#author').type('Cecy "The Mad press" Pressman')
+        cy.get('#url').type('https://www.google.com')
+        cy.contains('save').click()
+        cy.contains('button', 'Show').click()
+
+        cy.get('#likes')
+          .invoke('text')
+          .should('contain', '0')
+        cy.contains('button', 'Like').click()
+        cy.get('#likes')
+          .invoke('text')
+          .should('contain', '1')
+      })
+    })
   })
 })
