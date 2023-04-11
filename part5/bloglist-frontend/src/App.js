@@ -25,7 +25,7 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [user])
 
   const sortBlogs = blogs => blogs.sort((a, b) => b.likes - a.likes)
 
