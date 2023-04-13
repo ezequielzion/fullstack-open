@@ -18,7 +18,7 @@ const Blog = ({ blog, addLike, deleteBlog, user }) => {
       {
         showDetails ?
           (
-            <div>
+            <div className='blog'>
               <div>
                 <p>{blog.title}</p>
                 <p>{blog.author}</p>
