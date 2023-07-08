@@ -1,20 +1,23 @@
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
-
+import { useQuery } from 'react-query'
+import axios from 'axios'
 
 const App = () => {
+  const result = useQuery(
+    'notes',
+    () => axios.get('http://localhost:3001/anecotes').then(res => res.data)
+  )
+  console.log(result)
 
   const handleVote = (anecdote) => {
     console.log('vote')
   }
 
-  const anecdotes = [
-    {
-      "content": "If it hurts, do it more often",
-      "id": "47145",
-      "votes": 0
-    },
-  ]
+  const anecdotes = result.data
+
+  if (result.isLoading) return <>loading data...</>
+  if(result.isError) return <>anecdote service not available due to problems in server</>
 
   return (
     <div>
