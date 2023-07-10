@@ -1,23 +1,26 @@
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
-import { useQuery } from 'react-query'
-import axios from 'axios'
+import { useMutation, useQueryClient, useQuery } from 'react-query'
+import { getAnecdotes, voteAnecdote } from './requests'
 
 const App = () => {
-  const result = useQuery(
-    'notes',
-    () => axios.get('http://localhost:3001/anecotes').then(res => res.data)
-  )
-  console.log(result)
+  const queryClient = useQueryClient()
+  const result = useQuery('anecdotes', getAnecdotes)
+  
+  const newAnecdoteMutation = useMutation(voteAnecdote, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('anecdotes')
+    },
+  })
 
   const handleVote = (anecdote) => {
-    console.log('vote')
+    const newAnecdote = {...anecdote, votes: anecdote.votes + 1}
+    newAnecdoteMutation.mutate(newAnecdote)
   }
-
-  const anecdotes = result.data
 
   if (result.isLoading) return <>loading data...</>
   if(result.isError) return <>anecdote service not available due to problems in server</>
+  const anecdotes = result.data
 
   return (
     <div>
