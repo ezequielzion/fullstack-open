@@ -1,0 +1,5 @@
+DELETE      http://localhost:3003/api/blogs/63d85395242c25d4b02f96cd
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGUiLCJpZCI6IjYzZDc2NWMxY2VlMzcyYzFiYWQ1ZTFhYyIsImlhdCI6MTY3NTU4MTgxMH0.9VEXH9Oc16YOSGKYiHhRRyyaCmfwuRAuyj2AqDggM30
+
+Content-Type: application/json
+//There's gotta be a line break here and not between the URL and the Content-Type
